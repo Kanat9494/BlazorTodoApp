@@ -5,8 +5,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<TodoContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("MainConnection")
-    )
+        builder.Configuration.GetConnectionString("MainConnection") 
+    ), ServiceLifetime.Transient
 );
 
 builder.Services.AddScoped<IRepository, TodoService>();

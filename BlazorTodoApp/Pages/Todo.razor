@@ -47,12 +47,13 @@
                 </div>
 
                 <div class="col">
-                    <button class="btn btn-success" @onclick="AddTodo" >Add todo</button>
+                    @*<button class="btn btn-success" @onclick="AddTodo" >Add todo</button>*@
                 </div>
             </div>
 
             <div class="row">
                 <div class="col">
+                    <button class="btn btn-success" @onclick="CallTimer">Вызвать таймер</button>
                 </div>
             </div>
         </div>
@@ -63,9 +64,26 @@
 {
     private IEnumerable<TodoItem> todos = new List<TodoItem>();
 
+    //protected override void OnInitialized()
+    //{
+    //    todos = todoRepository.GetAllItems();
+    //}
+
+    private Timer timer;
+
     protected override void OnInitialized()
     {
         todos = todoRepository.GetAllItems();
+        //timer = new Timer(async (object? stateInfo) =>
+        //{
+        //    todos = todoRepository.GetAllItems();
+
+        //    await InvokeAsync(() =>
+        //    {
+        //        StateHasChanged();
+
+        //    });
+        //}, new AutoResetEvent(false), 2000, 2000);
     }
 
     private string newTodo;
@@ -86,5 +104,26 @@
     {
         changeItem.IsDone = !changeItem.IsDone;
         todoRepository.ValueChanged(changeItem);
+    }
+
+    private async Task CallTimer()
+    {
+        //TimerCallback timerCallback = new TimerCallback(LoadItems);
+        //Timer time = new Timer(timerCallback, null, 0, 3000);
+        timer = new Timer(async (object? stateInfo) =>
+        {
+            LoadItems();
+
+            await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }, new AutoResetEvent(false), 4000, 4000);
+    }
+
+    private void LoadItems()
+    {
+        todos = todoRepository.GetAllItems();
+        //StateHasChanged();
     }
 }
