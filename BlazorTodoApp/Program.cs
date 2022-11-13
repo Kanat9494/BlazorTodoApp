@@ -1,11 +1,15 @@
-using BlazorTodoApp.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddDbContext<TodoContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("MainConnection")
+    )
+);
+
+builder.Services.AddScoped<IRepository, TodoService>();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
